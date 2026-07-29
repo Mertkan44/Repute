@@ -1,0 +1,15 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "repute-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "cwd": "/Users/mertkansaitogullari/Desktop/Repute Agency/repute-agency",
+      "port": 3000,
+      "env": {
+        "PORT": "3000"
+      }
+    }
+  ]
+}

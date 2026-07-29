@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "repute-agency",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["node_modules/.bin/next", "dev", "--webpack", "--port", "3000"],
+      "port": 3000
+    }
+  ]
+}
