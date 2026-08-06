@@ -208,18 +208,19 @@ export default function Footer() {
             paddingBottom: "2rem",
           }}
         >
+          {/* Brand block on its own row, then the link columns share a row.
+              The four-column track was being forced onto phones, squeezing the
+              link columns down to ~45px wide. */}
           <div
+            className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-[2.5fr_1fr_1fr_1fr] gap-8 md:gap-8"
             style={{
               maxWidth: "1280px",
               margin: "0 auto",
-              display: "grid",
-              gridTemplateColumns: "2.5fr 1fr 1fr 1fr",
-              gap: "2rem",
               alignItems: "start",
             }}
           >
-            {/* Brand column */}
-            <div>
+            {/* Brand column — full width until the four-track layout kicks in */}
+            <div className="sm:col-span-3 md:col-span-1">
               <h2 style={{ marginBottom: "1.25rem", lineHeight: 0 }}>
                 <Image
                   src="/images/logo-repute-white.png"

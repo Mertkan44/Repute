@@ -176,7 +176,10 @@ export default function Hero() {
      language, so EN shows FR underneath and FR shows EN. */
   const altLang = lang === 'en' ? 'fr' : 'en'
 
-  const lineClass = 'text-white text-[clamp(1.92rem,6vw,5.6rem)] font-display leading-[1.02] tracking-[-0.02em]'
+  /* The 2rem floor is the ceiling in practice: at 375px the longest French line
+     ("À la croisée de l'émotion") needs 327px of the 327px available, so anything
+     larger wraps it to a third line. Above ~533px the vw term takes over. */
+  const lineClass = 'text-white text-[clamp(2rem,6vw,5.6rem)] font-display leading-[1.02] tracking-[-0.02em]'
   const renderPhrase = (lines: Phrase['en'], color = 'white') =>
     lines.map((line, li) => (
       <div key={li} className={lineClass} style={color !== 'white' ? { color } : undefined}>
@@ -188,8 +191,16 @@ export default function Hero() {
       </div>
     ))
 
+  /* The lens is a pointer-driven effect; on touch it either never fires or
+     sticks wherever the last tap landed, so it is off below the md breakpoint. */
   const lensActive =
-    isHeroVisible && hasMouse && y > 110 && y < viewport.h - 220 && x > 40 && x < viewport.w - 40
+    viewport.w >= 768 &&
+    isHeroVisible &&
+    hasMouse &&
+    y > 110 &&
+    y < viewport.h - 220 &&
+    x > 40 &&
+    x < viewport.w - 40
 
   // Cursor always visible
 
@@ -247,7 +258,7 @@ export default function Hero() {
 
       {/* Base headline — absolute overlay, viewport-aligned */}
       <div
-        className="absolute inset-0 flex items-center justify-center px-6 pt-28 pb-32 z-10 pointer-events-none"
+        className="absolute inset-0 flex items-center justify-center px-4 md:px-6 pt-28 pb-32 z-10 pointer-events-none"
         style={
           lensActive
             ? {
@@ -274,7 +285,7 @@ export default function Hero() {
 
         const fringeLayer = (dx: number, color: string) => (
           <div
-            className="absolute inset-0 flex items-center justify-center px-6 pt-28 pb-32 z-20 pointer-events-none"
+            className="absolute inset-0 flex items-center justify-center px-4 md:px-6 pt-28 pb-32 z-20 pointer-events-none"
             style={{
               clipPath: circleClip,
               WebkitClipPath: circleClip,
@@ -298,7 +309,7 @@ export default function Hero() {
           <>
             {/* Base white text inside full lens circle */}
             <div
-              className="absolute inset-0 flex items-center justify-center px-6 pt-28 pb-32 z-20 pointer-events-none"
+              className="absolute inset-0 flex items-center justify-center px-4 md:px-6 pt-28 pb-32 z-20 pointer-events-none"
               style={{ clipPath: circleClip, WebkitClipPath: circleClip }}
             >
               <div className="text-center" style={{ transform: `scale(${LENS_ZOOM})` }}>
