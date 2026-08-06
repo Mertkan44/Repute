@@ -121,8 +121,8 @@ export default function Footer() {
       }}
     >
       {/* ── Animated gradient, same shader as the hero but darker and slower so
-           the copy stays readable. Swap back to the video by restoring a <video>
-           here with /videos/footer-swing.webm + .mp4. ── */}
+           the copy stays readable. The swing footage is still available at
+           /videos/footer-swing.webm + .mp4 if it is ever wanted back. ── */}
       <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
         <GradientCanvas
           colors={["#000000", "#000000", "#3d0c00", "#8f2300", "#c2521a", "#000000", "#000000"]}
@@ -130,8 +130,7 @@ export default function Footer() {
         />
       </div>
 
-      {/* ── Black gradient falling from the top: holds the copy area solid,
-           then clears so the footage reads normally lower down ── */}
+      {/* ── Black gradient falling from the top so the copy area stays solid ── */}
       <div
         aria-hidden
         style={{
@@ -144,8 +143,7 @@ export default function Footer() {
         }}
       />
 
-      {/* ── Short scrim behind the copyright strip, so the legal line keeps
-           enough contrast where the gradient is at its warmest. ── */}
+      {/* ── Short scrim behind the copyright strip, where the gradient is warmest ── */}
       <div
         aria-hidden
         style={{
@@ -171,16 +169,19 @@ export default function Footer() {
           position: "absolute",
           left: 0,
           right: 0,
-          bottom: "-2.5vw",
+          /* Sits fully inside the footer, clear of the copyright row. It used to
+             be pushed past the bottom edge, so scrolling to the end left it
+             cropped and unreadable. */
+          bottom: "4.5rem",
           zIndex: 1,
           pointerEvents: "none",
           textAlign: "center",
-          lineHeight: 0.8,
+          lineHeight: 0.9,
           fontFamily: '"PP Neue Montreal", sans-serif',
           fontWeight: 700,
-          fontSize: "20vw",
+          fontSize: "15vw",
           letterSpacing: "-0.04em",
-          color: "rgba(255,255,255,0.30)",
+          color: "rgba(255,255,255,0.20)",
           mixBlendMode: "overlay",
           userSelect: "none",
         }}
@@ -400,17 +401,11 @@ export default function Footer() {
           0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(34,197,94,0.45); }
           50% { opacity: 0.7; box-shadow: 0 0 0 4px rgba(34,197,94,0); }
         }
-        /* Very slow drift so the wordmark breathes against the gradient
-           instead of sitting dead still. */
-        footer .footer-wordmark { animation: footerDrift 18s ease-in-out infinite; }
-        @keyframes footerDrift {
-          0%, 100% { transform: translateX(-1.2%); }
-          50%      { transform: translateX(1.2%); }
-        }
+        /* The wordmark stays put — sliding it around read as a glitch rather
+           than as motion design. */
         @media (prefers-reduced-motion: reduce) {
           footer .footer-link-arrow { transition: none; }
           footer .footer-live-dot { animation: none; }
-          footer .footer-wordmark { animation: none; }
         }
       `}</style>
     </footer>
