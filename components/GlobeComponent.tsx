@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type TopoArc = number[][];
 type TopoGeometry =
@@ -163,9 +163,12 @@ function drawLines(
 }
 
 /* ── Component ── */
-export default function GlobeComponent() {
+export default function GlobeComponent({ size }: { size?: number } = {}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const overlayRef = useRef<HTMLCanvasElement>(null);
+  /* Rendered at a fixed 800px before, which is over twice the width of a phone
+     — the globe ended up cropped instead of framed. */
+  const [box, setBox] = useState(size ?? 800);
   const ptrRef = useRef<{ x: number; y: number } | null>(null);
   /* Centring longitude L requires phi = -PI/2 - L(rad); for Istanbul (28.98°E)
      that is -2.0766. Theta sits below Istanbul's latitude on purpose so the city
@@ -185,6 +188,24 @@ export default function GlobeComponent() {
       .catch(() => {});
   }, []);
 
+  /* Track the parent's width when no explicit size is given, so the globe fills
+     its card on phones instead of overflowing it. */
+  useEffect(() => {
+    if (size) return;
+    /* Explicit marker rather than walking parents: the globe's own wrapper is
+       sized by `box`, so measuring an ancestor by position would be circular. */
+    const el = canvasRef.current?.closest("[data-globe-frame]") as HTMLElement | null;
+    if (!el) return;
+    const measure = () => {
+      const w = el.getBoundingClientRect().width;
+      if (w > 0) setBox(Math.round(Math.min(Math.max(w, 260), 800)));
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [size]);
+
   /* Cobe globe + overlay render loop */
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -195,9 +216,10 @@ export default function GlobeComponent() {
     const ctx = overlay.getContext("2d");
     if (!ctx) return;
     const overlayCtx = ctx;
-    const SZ = 800;
+    const SZ = box;
     overlay.width = SZ * 2;
     overlay.height = SZ * 2;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.scale(2, 2);
 
     let raf = 0;
@@ -232,8 +254,8 @@ export default function GlobeComponent() {
       if (dead) return;
       const globe = (mod as CobeModule).default(canvas, {
         devicePixelRatio: 2,
-        width: 1600,
-        height: 1600,
+        width: SZ * 2,
+        height: SZ * 2,
         phi: phiRef.current,
         theta: thetaRef.current,
         dark: 1,
@@ -277,13 +299,13 @@ export default function GlobeComponent() {
       stop();
       (canvas as KillableCanvas).__kill?.();
     };
-  }, []);
+  }, [box]);
 
   return (
-    <div style={{ position: "relative", width: 800, height: 800 }}>
+    <div style={{ position: "relative", width: box, height: box }}>
       <canvas
         ref={canvasRef}
-        style={{ width: 800, height: 800, display: "block" }}
+        style={{ width: box, height: box, display: "block" }}
         onPointerDown={(e) => {
           ptrRef.current = { x: e.clientX, y: e.clientY };
           /* Capture so a drag keeps working past the canvas edge */
@@ -319,8 +341,8 @@ export default function GlobeComponent() {
           position: "absolute",
           top: 0,
           left: 0,
-          width: 800,
-          height: 800,
+          width: box,
+          height: box,
           pointerEvents: "none",
         }}
       />

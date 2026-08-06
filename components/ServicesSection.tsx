@@ -141,6 +141,8 @@ function getServices(lang: Lang) {
 export default function ServicesSection() {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  /* Which card's hover video has buffered enough to show */
+  const [readyId, setReadyId] = useState<string | null>(null);
   const { lang } = useLanguage();
   const t = intro[lang];
   const services = getServices(lang);
@@ -277,6 +279,7 @@ export default function ServicesSection() {
                 }}
                 onMouseLeave={(e) => {
                   setHoveredId((h) => (h === svc.id ? null : h));
+                  setReadyId((r) => (r === svc.id ? null : r));
                   if (!isActive) {
                     e.currentTarget.style.borderColor = isActive
                       ? "rgba(255,255,255,0.14)"
@@ -335,6 +338,11 @@ export default function ServicesSection() {
                               position: "absolute",
                               inset: 0,
                               backgroundColor: "#080808",
+                              /* Held transparent until the video can actually play.
+                                 The fill is opaque, so revealing it immediately hid
+                                 the still and left the card blank while loading. */
+                              opacity: readyId === svc.id ? 1 : 0,
+                              transition: "opacity 0.25s ease",
                             }}
                           >
                             <video
@@ -342,8 +350,9 @@ export default function ServicesSection() {
                               loop
                               muted
                               playsInline
-                              preload="none"
+                              preload="auto"
                               key={`hover-${svc.id}`}
+                              onCanPlay={() => setReadyId(svc.id)}
                               style={{
                                 width: "100%",
                                 height: "100%",

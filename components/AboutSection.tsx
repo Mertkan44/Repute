@@ -277,9 +277,11 @@ export default function AboutSection() {
               </div>
             </div>
 
-            {/* Globe */}
+            {/* Globe — centred and sized to the card. The old fixed 800px canvas
+                was pinned with a negative offset, which cropped it badly on phones. */}
             <div
-              className="min-h-[220px] md:min-h-[380px]"
+              data-globe-frame
+              className="min-h-[300px] md:min-h-[380px]"
               style={{
                 flex: 1,
                 position: "relative",
@@ -287,13 +289,8 @@ export default function AboutSection() {
               }}
             >
               <div
-                style={{
-                  position: "absolute",
-                  bottom: "-120px",
-                  left: "50%",
-                  transform: "translateX(-45%)",
-                  lineHeight: 0,
-                }}
+                className="absolute left-1/2 -translate-x-1/2 bottom-[-18%] md:bottom-[-120px] md:left-1/2 md:-translate-x-[45%]"
+                style={{ lineHeight: 0 }}
               >
                 <GlobeComponent />
               </div>
