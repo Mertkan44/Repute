@@ -112,25 +112,25 @@ const servicesByLang = {
 
 const media = {
   social: {
-    videoMov: "/videos/services-branding.mov",
-    videoWebm: "/videos/services-branding.webm",
-    image: "/images/services-branding.png",
+    videoMov: "/videos/services-social.mov",
+    videoWebm: "/videos/services-social.webm",
+    image: "/images/services-social.png",
     imageAlt: "Social media strategy",
     accent: "#ffffff",
   },
   influencer: {
-    videoMov: "/videos/services-web.mov",
-    videoWebm: "/videos/services-web.webm",
-    image: "/images/services-web.png",
+    videoMov: "/videos/services-influencer.mov",
+    videoWebm: "/videos/services-influencer.webm",
+    image: "/images/services-influencer.png",
     imageAlt: "Influencer collaboration",
     accent: "#ffffff",
   },
   performance: {
-    videoMov: "/videos/services-motion.mov",
-    videoWebm: "/videos/services-motion.webm",
-    image: "/images/services-motion.png",
+    videoMov: "/videos/services-performance.mov",
+    videoWebm: "/videos/services-performance.webm",
+    image: "/images/services-performance.png",
     imageAlt: "Performance marketing",
-    accent: "#D4410B",
+    accent: "#ffffff",
   },
 };
 
@@ -140,6 +140,7 @@ function getServices(lang: Lang) {
 
 export default function ServicesSection() {
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
   const { lang } = useLanguage();
   const t = intro[lang];
   const services = getServices(lang);
@@ -147,7 +148,7 @@ export default function ServicesSection() {
   return (
     <section
       id="services"
-      className="px-4 md:px-8"
+      className="px-6 md:px-10 lg:px-14"
       style={{
         backgroundColor: "#000",
         paddingTop: "5rem",
@@ -155,7 +156,7 @@ export default function ServicesSection() {
         overflow: "hidden",
       }}
     >
-      <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
+      <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
         {/* Header */}
         <div
           style={{
@@ -269,11 +270,13 @@ export default function ServicesSection() {
                   minWidth: 0,
                 }}
                 onMouseEnter={(e) => {
+                  setHoveredId(svc.id);
                   if (!isActive) {
                     e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)";
                   }
                 }}
                 onMouseLeave={(e) => {
+                  setHoveredId((h) => (h === svc.id ? null : h));
                   if (!isActive) {
                     e.currentTarget.style.borderColor = isActive
                       ? "rgba(255,255,255,0.14)"
@@ -322,6 +325,39 @@ export default function ServicesSection() {
                             padding: "1.5rem",
                           }}
                         />
+
+                        {/* Hover preview — mounts only on hover, sits directly over
+                            the still with identical geometry so there is no jump.
+                            The opaque fill gives `screen` a backdrop to blend onto. */}
+                        {hoveredId === svc.id && !isActive && (
+                          <div
+                            style={{
+                              position: "absolute",
+                              inset: 0,
+                              backgroundColor: "#080808",
+                            }}
+                          >
+                            <video
+                              autoPlay
+                              loop
+                              muted
+                              playsInline
+                              preload="none"
+                              key={`hover-${svc.id}`}
+                              style={{
+                                width: "100%",
+                                height: "100%",
+                                objectFit: "contain",
+                                objectPosition: "center",
+                                padding: "1.5rem",
+                                mixBlendMode: "screen",
+                              }}
+                            >
+                              <source src={svc.videoMov} type="video/mp4; codecs=hvc1" />
+                              <source src={svc.videoWebm} type="video/webm; codecs=vp9" />
+                            </video>
+                          </div>
+                        )}
                       </div>
                       {/* Label at bottom */}
                       <div
@@ -335,7 +371,7 @@ export default function ServicesSection() {
                             fontFamily: '"PP Neue Montreal", sans-serif',
                             fontWeight: 500,
                             fontSize: "1rem",
-                            color: svc.id === "performance" ? "#D4410B" : "#ffffff",
+                            color: "#ffffff",
                           }}
                         >
                           {svc.label}
@@ -358,10 +394,7 @@ export default function ServicesSection() {
                           fontFamily: '"PP Neue Montreal", sans-serif',
                           fontWeight: 500,
                           fontSize: "0.9rem",
-                          color:
-                            svc.id === "performance"
-                              ? "#D4410B"
-                              : "rgba(255,255,255,0.65)",
+                          color: "rgba(255,255,255,0.65)",
                           whiteSpace: "nowrap",
                           transform: "rotate(-90deg)",
                           display: "block",
@@ -476,7 +509,13 @@ export default function ServicesSection() {
                       flex: "0 0 44%",
                       position: "relative",
                       overflow: "hidden",
-                      backgroundColor: "#000",
+                      /* Must match the card's effective colour exactly — the card is
+                         rgba(255,255,255,0.03) over #000, i.e. rgb(8,8,8). This also
+                         gives the video's `screen` blend a backdrop to work against:
+                         the wrapper's z-index creates its own stacking context, so
+                         without a fill here the blend has nothing to composite onto
+                         and the footage's black stays black. */
+                      backgroundColor: "#080808",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
@@ -494,11 +533,13 @@ export default function ServicesSection() {
                           height: "100%",
                           objectFit: "contain",
                           objectPosition: "center",
+                          /* The footage carries a baked-in black background.
+                             Screen blending drops pure black to nothing, so the
+                             card shows through instead of a dark rectangle. */
+                          mixBlendMode: "screen",
                         }}
                       >
-                        {/* Safari: HEVC with alpha channel */}
                         <source src={svc.videoMov} type="video/mp4; codecs=hvc1" />
-                        {/* Chrome/Firefox: VP9 WebM with alpha */}
                         <source src={svc.videoWebm} type="video/webm; codecs=vp9" />
                       </video>
                     )}
@@ -539,7 +580,7 @@ export default function ServicesSection() {
                       fontFamily: '"PP Neue Montreal", sans-serif',
                       fontWeight: 500,
                       fontSize: "1rem",
-                      color: svc.id === "performance" ? "#D4410B" : "#ffffff",
+                      color: "#ffffff",
                     }}
                   >
                     {svc.label}

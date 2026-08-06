@@ -68,14 +68,14 @@ export default function AboutSection() {
   return (
     <section
       id="about"
-      className="px-4 md:px-8"
+      className="px-6 md:px-10 lg:px-14"
       style={{
         backgroundColor: "#000",
         paddingTop: "5rem",
         paddingBottom: "5rem",
       }}
     >
-      <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
+      <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
         {/* Section Label */}
         <p
           style={{
@@ -163,17 +163,17 @@ export default function AboutSection() {
                 minHeight: "200px",
               }}
             >
-              <span
-                style={{
-                  fontFamily: '"PP Neue Montreal", sans-serif',
-                  fontWeight: 700,
-                  fontSize: "clamp(1.8rem, 3vw, 2.6rem)",
-                  letterSpacing: "-0.02em",
-                  color: "rgba(255,255,255,0.9)",
-                }}
-              >
-                Meta
-              </span>
+              {/* Wordmark recoloured white for dark backgrounds; the blue mark is
+                  left untouched, per Meta's own dark-surface usage. */}
+              <div style={{ position: "relative", width: "78%", aspectRatio: "1080 / 260" }}>
+                <Image
+                  src="/images/meta-logo.png"
+                  alt="Meta"
+                  fill
+                  sizes="20vw"
+                  style={{ objectFit: "contain" }}
+                />
+              </div>
             </div>
 
             {/* Bottom label */}

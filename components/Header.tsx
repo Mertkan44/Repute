@@ -1,25 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 import { useLanguage } from '@/lib/LanguageContext'
-
-function LiveClock({ timezone }: { timezone: string }) {
-  const [time, setTime] = useState('')
-  useEffect(() => {
-    const update = () =>
-      setTime(
-        new Date().toLocaleTimeString('en-US', {
-          timeZone: timezone,
-          hour: '2-digit',
-          minute: '2-digit',
-          hour12: true,
-        })
-      )
-    update()
-    const id = setInterval(update, 1000)
-    return () => clearInterval(id)
-  }, [timezone])
-  return <>{time}</>
-}
 
 function scrollTo(href: string) {
   if (!href.startsWith('#')) return
@@ -44,22 +26,40 @@ const copy = {
   },
 }
 
-const clocks = [
-  { timezone: 'Europe/Istanbul', label: 'IST', active: true },
-  { timezone: 'Europe/London', label: 'LON' },
-  { timezone: 'America/New_York', label: 'NYC' },
-]
-
 const linkClass =
   'flex items-center gap-2 text-white/80 text-[11.5px] font-light tracking-[0.14em] uppercase leading-[2.1] hover:text-white transition-colors duration-200 cursor-pointer'
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
   const { lang, setLang } = useLanguage()
   const t = copy[lang]
 
   const navLeft = [{ label: t.home, href: '#home', active: true }, { label: t.work, href: '#work' }]
   const navCenter = [{ label: t.about, href: '#about' }, { label: t.contact, href: '#quote' }]
+
+  /* Past the hero the header crosses both cream and black sections, so white
+     type alone is unreadable. Fade in a dark blurred backdrop once scrolled. */
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 80)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  const backdrop: React.CSSProperties = scrolled
+    ? {
+        backgroundColor: 'rgba(8,8,8,0.72)',
+        backdropFilter: 'blur(14px) saturate(1.2)',
+        WebkitBackdropFilter: 'blur(14px) saturate(1.2)',
+        borderBottom: '1px solid rgba(255,255,255,0.08)',
+      }
+    : {
+        backgroundColor: 'transparent',
+        backdropFilter: 'none',
+        WebkitBackdropFilter: 'none',
+        borderBottom: '1px solid transparent',
+      }
 
   /* Lock body scroll when mobile menu is open */
   useEffect(() => {
@@ -95,58 +95,83 @@ export default function Header() {
     <>
       {/* ─── Desktop header ─── */}
       <header
-        className="fixed top-0 left-0 right-0 z-50 hidden md:grid grid-cols-4 px-10 pt-7 pb-0 items-start"
-        style={{ willChange: 'transform', transform: 'translateZ(0)' }}
+        className="fixed top-0 left-0 right-0 z-50 hidden md:block px-6 md:px-10 lg:px-14"
+        style={{
+          willChange: 'transform',
+          transform: 'translateZ(0)',
+          paddingTop: scrolled ? '1.1rem' : '1.75rem',
+          paddingBottom: scrolled ? '0.9rem' : '0',
+          transition:
+            'background-color 0.35s ease, backdrop-filter 0.35s ease, padding 0.35s ease, border-color 0.35s ease',
+          ...backdrop,
+        }}
       >
-        {/* Logo */}
-        <a href="#home" onClick={(e) => handleClick(e, '#home')} className="flex items-center gap-2.5 pt-px">
-          <span className="text-white text-[13px] font-light tracking-[0.14em] uppercase">Repute</span>
-          <span className="text-white/25 font-thin select-none text-sm">|</span>
-          <span className="text-white/55 text-[11px] font-light tracking-[0.22em] uppercase">agency</span>
-        </a>
+        {/* Logo left, nav genuinely centred, language right. An equal 4-column
+            grid left the two nav blocks stranded at arbitrary offsets. */}
+        <div
+          className="grid items-center gap-8"
+          style={{ maxWidth: '1280px', margin: '0 auto', gridTemplateColumns: '1fr auto 1fr' }}
+        >
+          {/* Logo */}
+          <a href="#home" onClick={(e) => handleClick(e, '#home')} className="flex items-center gap-3 shrink-0">
+            <Image
+              src="/images/logo-repute-white.png"
+              alt="RÉPUTÉ"
+              width={338}
+              height={78}
+              priority
+              style={{ width: '118px', height: 'auto', display: 'block' }}
+            />
+            <span className="text-white/25 font-thin select-none text-sm">|</span>
+            <span className="text-white/55 text-[11px] font-light tracking-[0.22em] uppercase">agency</span>
+          </a>
 
-        {/* Primary nav */}
-        <nav className="flex flex-col">
-          {navLeft.map((item) => (
-            <a key={item.label} href={item.href} className={linkClass} onClick={(e) => handleClick(e, item.href)}>
-              {item.active && <span className="text-white/50 text-[8px] leading-none">▶</span>}
-              {item.label}
-            </a>
-          ))}
-        </nav>
+          {/* Both nav groups as one centred cluster */}
+          <div className="flex items-center gap-12 shrink-0">
+            <nav className="flex flex-col">
+              {navLeft.map((item) => (
+                <a key={item.label} href={item.href} className={linkClass} onClick={(e) => handleClick(e, item.href)}>
+                  {item.active && <span className="text-white/50 text-[8px] leading-none">▶</span>}
+                  {item.label}
+                </a>
+              ))}
+            </nav>
 
-        {/* Secondary nav */}
-        <nav className="flex flex-col">
-          {navCenter.map((item) => (
-            <a key={item.label} href={item.href} className={linkClass} onClick={(e) => handleClick(e, item.href)}>
-              {item.label}
-            </a>
-          ))}
-        </nav>
+            <nav className="flex flex-col">
+              {navCenter.map((item) => (
+                <a key={item.label} href={item.href} className={linkClass} onClick={(e) => handleClick(e, item.href)}>
+                  {item.label}
+                </a>
+              ))}
+            </nav>
+          </div>
 
-        {/* Clocks + language toggle */}
-        <div className="flex flex-col items-end gap-2">
-          {clocks.map((c) => (
-            <span key={c.timezone} className={linkClass}>
-              {c.active && <span className="text-white/50 text-[8px] leading-none">▶</span>}
-              <span className="font-mono tabular-nums">
-                <LiveClock timezone={c.timezone} />
-              </span>
-            </span>
-          ))}
-          <LangToggle className="mt-1" />
+          {/* Language toggle */}
+          <div className="flex items-center justify-end shrink-0">
+            <LangToggle />
+          </div>
         </div>
       </header>
 
       {/* ─── Mobile header bar ─── */}
       <header
         className="fixed top-0 left-0 right-0 z-50 md:hidden flex items-center justify-between px-5 pt-5 pb-4"
-        style={{ willChange: 'transform', transform: 'translateZ(0)' }}
+        style={{
+          willChange: 'transform',
+          transform: 'translateZ(0)',
+          transition: 'background-color 0.35s ease, backdrop-filter 0.35s ease, border-color 0.35s ease',
+          ...(menuOpen ? { backgroundColor: 'transparent', backdropFilter: 'none', borderBottom: '1px solid transparent' } : backdrop),
+        }}
       >
         <a href="#home" onClick={(e) => handleClick(e, '#home')} className="flex items-center gap-2.5">
-          <span className="text-white text-[13px] font-light tracking-[0.14em] uppercase">Repute</span>
-          <span className="text-white/25 font-thin select-none text-sm">|</span>
-          <span className="text-white/55 text-[11px] font-light tracking-[0.22em] uppercase">agency</span>
+          <Image
+            src="/images/logo-repute-white.png"
+            alt="RÉPUTÉ"
+            width={338}
+            height={78}
+            priority
+            style={{ width: '104px', height: 'auto', display: 'block' }}
+          />
         </a>
 
         <div className="flex items-center gap-4">
@@ -214,35 +239,6 @@ export default function Header() {
             </a>
           ))}
         </nav>
-
-        {/* Clocks row at bottom */}
-        <div className="flex gap-8 px-6 pb-10 pt-4 border-t border-white/10">
-          {clocks.map((c) => (
-            <div key={c.timezone}>
-              <div
-                style={{
-                  fontFamily: '"PP Supply Mono", monospace',
-                  fontSize: '0.6rem',
-                  letterSpacing: '0.14em',
-                  color: 'rgba(255,255,255,0.4)',
-                  textTransform: 'uppercase',
-                  marginBottom: '2px',
-                }}
-              >
-                {c.label}
-              </div>
-              <div
-                style={{
-                  fontFamily: 'monospace',
-                  fontSize: '0.9rem',
-                  color: 'rgba(255,255,255,0.7)',
-                }}
-              >
-                <LiveClock timezone={c.timezone} />
-              </div>
-            </div>
-          ))}
-        </div>
       </div>
     </>
   )

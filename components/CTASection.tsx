@@ -59,9 +59,11 @@ export default function CTASection() {
     <section
       id="cta"
       ref={sectionRef}
+      className="px-6 md:px-10 lg:px-14"
       style={{
         backgroundColor: "transparent",
-        padding: "8rem 2rem",
+        paddingTop: "8rem",
+        paddingBottom: "8rem",
         borderTop: "1px solid rgba(0,0,0,0.08)",
         textAlign: "center",
       }}

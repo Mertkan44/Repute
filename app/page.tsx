@@ -24,11 +24,11 @@ export default function Home() {
         <div className="rounded-2xl overflow-hidden">
           <ServicesSection />
           <AboutSection />
+          <QuoteForm />
         </div>
       </div>
 
       <CTASection />
-      <QuoteForm />
       <div className="px-3 md:px-5 pb-3">
         <div className="rounded-2xl overflow-hidden">
           <Footer />

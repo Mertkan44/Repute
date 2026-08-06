@@ -167,8 +167,11 @@ export default function GlobeComponent() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const overlayRef = useRef<HTMLCanvasElement>(null);
   const ptrRef = useRef<{ x: number; y: number } | null>(null);
-  const phiRef = useRef(-0.5); // face Istanbul/Europe
-  const thetaRef = useRef(0.25);
+  /* Centring longitude L requires phi = -PI/2 - L(rad); for Istanbul (28.98°E)
+     that is -2.0766. Theta sits below Istanbul's latitude on purpose so the city
+     lands in the upper half — the globe is cropped at the card's bottom edge. */
+  const phiRef = useRef(-2.0766);
+  const thetaRef = useRef(0.45);
   const coastRef = useRef<number[][][]>([]);
   const gratRef = useRef(graticule());
 
@@ -283,26 +286,31 @@ export default function GlobeComponent() {
         style={{ width: 800, height: 800, display: "block" }}
         onPointerDown={(e) => {
           ptrRef.current = { x: e.clientX, y: e.clientY };
+          /* Capture so a drag keeps working past the canvas edge */
+          e.currentTarget.setPointerCapture(e.pointerId);
           e.currentTarget.style.cursor = "grabbing";
         }}
-        onPointerUp={() => {
+        onPointerUp={(e) => {
+          ptrRef.current = null;
+          e.currentTarget.releasePointerCapture(e.pointerId);
+          e.currentTarget.style.cursor = "grab";
+        }}
+        onPointerCancel={() => {
           ptrRef.current = null;
           if (canvasRef.current) canvasRef.current.style.cursor = "grab";
         }}
-        onPointerOut={() => {
-          ptrRef.current = null;
-        }}
-        onMouseMove={(e) => {
-          if (ptrRef.current) {
-            const dx = e.clientX - ptrRef.current.x;
-            const dy = e.clientY - ptrRef.current.y;
-            phiRef.current -= dx * 0.005;
-            thetaRef.current = Math.max(
-              -1,
-              Math.min(1, thetaRef.current + dy * 0.005)
-            );
-            ptrRef.current = { x: e.clientX, y: e.clientY };
-          }
+        onPointerMove={(e) => {
+          if (!ptrRef.current) return;
+          const dx = e.clientX - ptrRef.current.x;
+          const dy = e.clientY - ptrRef.current.y;
+          /* Raising phi moves the surface right, so a rightward drag adds to it —
+             the previous subtraction made the globe fight the pointer. */
+          phiRef.current += dx * 0.005;
+          thetaRef.current = Math.max(
+            -1,
+            Math.min(1, thetaRef.current + dy * 0.005)
+          );
+          ptrRef.current = { x: e.clientX, y: e.clientY };
         }}
       />
       <canvas

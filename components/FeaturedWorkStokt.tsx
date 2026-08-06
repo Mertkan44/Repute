@@ -41,14 +41,14 @@ export default function FeaturedWork() {
   return (
     <section
       id="work"
-      className="px-4 md:px-8"
+      className="px-6 md:px-10 lg:px-14"
       style={{
         backgroundColor: "transparent",
         paddingTop: "5rem",
         paddingBottom: "5rem",
       }}
     >
-      <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
+      <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
         {/* Header */}
         <div
           style={{

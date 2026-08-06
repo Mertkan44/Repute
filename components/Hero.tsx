@@ -172,6 +172,10 @@ export default function Hero() {
   const LENS_SIZE = 260
   const LENS_ZOOM = 1.16
 
+  /* The lens is a translation window: it reveals the phrase in the *other*
+     language, so EN shows FR underneath and FR shows EN. */
+  const altLang = lang === 'en' ? 'fr' : 'en'
+
   const lineClass = 'text-white text-[clamp(1.92rem,6vw,5.6rem)] font-display leading-[1.02] tracking-[-0.02em]'
   const renderPhrase = (lines: Phrase['en'], color = 'white') =>
     lines.map((line, li) => (
@@ -221,18 +225,23 @@ export default function Hero() {
       <div className="flex-1" />
 
       {/* Bottom bar */}
-      <div className="relative z-20 px-6 md:px-10 pb-8 pt-6 grid grid-cols-2 md:grid-cols-3 gap-4">
-        <div>
-          <p className="text-white/90 text-sm tracking-tight font-medium">{bottomBar[lang][0][0]}</p>
-          <p className="text-white/50 text-sm tracking-tight">{bottomBar[lang][0][1]}</p>
-        </div>
-        <div className="hidden md:block text-center">
-          <p className="text-white/90 text-sm tracking-tight font-medium">{bottomBar[lang][1][0]}</p>
-          <p className="text-white/50 text-sm tracking-tight">{bottomBar[lang][1][1]}</p>
-        </div>
-        <div className="text-right">
-          <p className="text-white/90 text-sm tracking-tight font-medium">{bottomBar[lang][2][0]}</p>
-          <p className="text-white/50 text-sm tracking-tight">{bottomBar[lang][2][1]}</p>
+      <div className="relative z-20 px-6 md:px-10 lg:px-14 pb-8 pt-6">
+        <div
+          className="grid grid-cols-2 md:grid-cols-3 gap-4"
+          style={{ maxWidth: '1280px', margin: '0 auto' }}
+        >
+          <div>
+            <p className="text-white/90 text-sm tracking-tight font-medium">{bottomBar[lang][0][0]}</p>
+            <p className="text-white/50 text-sm tracking-tight">{bottomBar[lang][0][1]}</p>
+          </div>
+          <div className="hidden md:block text-center">
+            <p className="text-white/90 text-sm tracking-tight font-medium">{bottomBar[lang][1][0]}</p>
+            <p className="text-white/50 text-sm tracking-tight">{bottomBar[lang][1][1]}</p>
+          </div>
+          <div className="text-right">
+            <p className="text-white/90 text-sm tracking-tight font-medium">{bottomBar[lang][2][0]}</p>
+            <p className="text-white/50 text-sm tracking-tight">{bottomBar[lang][2][1]}</p>
+          </div>
         </div>
       </div>
 
@@ -261,7 +270,7 @@ export default function Hero() {
         const circleClip = `circle(${LENS_R}px at ${lx}px ${ly + scrollY}px)`
         const ringMask = `radial-gradient(circle ${LENS_R}px at ${lx}px ${ly + scrollY}px, transparent 0px, transparent ${ringInner}px, black ${ringFade}px, black ${LENS_R}px)`
 
-        const renderLines = (color: string) => renderPhrase(phrases[index][lang], color)
+        const renderLines = (color: string) => renderPhrase(phrases[index][altLang], color)
 
         const fringeLayer = (dx: number, color: string) => (
           <div

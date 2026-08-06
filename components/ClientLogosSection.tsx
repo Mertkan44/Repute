@@ -104,10 +104,10 @@ export default function ClientLogosSection() {
     >
       {/* Section header */}
       <div
+        className="px-6 md:px-10 lg:px-14"
         style={{
-          maxWidth: "1400px",
+          maxWidth: "1280px",
           margin: "0 auto",
-          padding: "0 2rem",
           marginBottom: "3rem",
         }}
       >

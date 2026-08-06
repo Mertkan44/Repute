@@ -2,10 +2,16 @@
 import { useEffect, useRef, useState } from 'react'
 import { MeshGradient } from '@paper-design/shaders-react'
 
+const HERO_COLORS = ['#000000', '#000000', '#7a1800', '#ff4d00', '#ffab2e', '#000000', '#000000']
+
 export default function GradientCanvas({
   mouseRef,
+  colors = HERO_COLORS,
+  speed = 0.32,
 }: {
   mouseRef?: React.MutableRefObject<{ x: number; y: number }>
+  colors?: string[]
+  speed?: number
 }) {
   const INIT = { ox: 0.12, oy: -0.05, rot: 6, swirl: 0.9, distortion: 0.95 }
   const [state, setState] = useState(INIT)
@@ -89,8 +95,10 @@ export default function GradientCanvas({
     <div ref={wrapRef} className="absolute inset-0 w-full h-full">
       <MeshGradient
         style={{ width: '100%', height: '100%' }}
-        colors={['#000000', '#000000', '#ff3d00', '#000000', '#000000', '#0b1580', '#000000']}
-        speed={0.32}
+        /* Black-dominant with a single warm light source: deep ember → orange → amber.
+           Kept strictly in the red/orange/yellow family — no cool tones. */
+        colors={colors}
+        speed={speed}
         distortion={state.distortion}
         swirl={state.swirl}
         offsetX={state.ox}
