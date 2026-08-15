@@ -150,11 +150,9 @@ export default function ServicesSection() {
   return (
     <section
       id="services"
-      className="px-6 md:px-10 lg:px-14"
+      className="px-6 md:px-10 lg:px-14 py-14 md:py-20"
       style={{
         backgroundColor: "#000",
-        paddingTop: "5rem",
-        paddingBottom: "5rem",
         overflow: "hidden",
       }}
     >
@@ -581,19 +579,42 @@ export default function ServicesSection() {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
-                    padding: "1.25rem 1.5rem",
+                    gap: "1rem",
+                    padding: "1rem 1.25rem",
                   }}
                 >
-                  <span
-                    style={{
-                      fontFamily: '"PP Neue Montreal", sans-serif',
-                      fontWeight: 500,
-                      fontSize: "1rem",
-                      color: "#ffffff",
-                    }}
-                  >
-                    {svc.label}
-                  </span>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.9rem", minWidth: 0 }}>
+                    {/* Icon shows in the collapsed row too — the row was text-only
+                        until expanded, which hid the artwork on phones entirely. */}
+                    <div
+                      style={{
+                        position: "relative",
+                        width: "46px",
+                        height: "46px",
+                        flexShrink: 0,
+                        opacity: isActive ? 0 : 1,
+                        transition: "opacity 0.25s ease",
+                      }}
+                    >
+                      <Image
+                        src={svc.image}
+                        alt=""
+                        fill
+                        sizes="46px"
+                        style={{ objectFit: "contain" }}
+                      />
+                    </div>
+                    <span
+                      style={{
+                        fontFamily: '"PP Neue Montreal", sans-serif',
+                        fontWeight: 500,
+                        fontSize: "1rem",
+                        color: "#ffffff",
+                      }}
+                    >
+                      {svc.label}
+                    </span>
+                  </div>
                   <span
                     style={{
                       color: "rgba(255,255,255,0.5)",

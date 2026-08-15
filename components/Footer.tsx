@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useLanguage, Lang } from "@/lib/LanguageContext";
-import GradientCanvas from "./GradientCanvas";
 
 const footerLinksByLang: Record<
   Lang,
@@ -113,39 +112,47 @@ export default function Footer() {
 
   return (
     <footer
+      className="min-h-[auto] md:min-h-screen"
       style={{
         position: "relative",
         overflow: "hidden",
-        minHeight: "100vh",
         backgroundColor: "#000",
       }}
     >
-      {/* ── Animated gradient, same shader as the hero but darker and slower so
-           the copy stays readable. The swing footage is still available at
-           /videos/footer-swing.webm + .mp4 if it is ever wanted back. ── */}
+      {/* ── Background image. Its own falloff does most of the work: the top and
+           bottom fifths average 2–3/255, so the copy sits on near-black without
+           needing a heavy scrim. The gradient shader and the swing footage are
+           both still available if this is ever swapped back. ── */}
       <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
-        <GradientCanvas
-          colors={["#000000", "#000000", "#3d0c00", "#8f2300", "#c2521a", "#000000", "#000000"]}
-          speed={0.16}
+        <Image
+          src="/images/footer-bg.png"
+          alt=""
+          fill
+          priority={false}
+          sizes="100vw"
+          style={{ objectFit: "cover", objectPosition: "center" }}
         />
       </div>
 
-      {/* ── Black gradient falling from the top so the copy area stays solid ── */}
+      {/* ── Black gradient falling from the top so the copy area stays solid.
+           Phones need considerably more of it: the footer is far shorter there,
+           so the copy lands on the image's bright middle band instead of clearing
+           it the way it does on desktop. Strengthened via CSS below. ── */}
       <div
         aria-hidden
+        className="footer-scrim-top"
         style={{
           position: "absolute",
           inset: 0,
           zIndex: 1,
           pointerEvents: "none",
-          background:
-            "linear-gradient(180deg, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.6) 22%, rgba(0,0,0,0.3) 42%, rgba(0,0,0,0.1) 62%, rgba(0,0,0,0) 78%)",
         }}
       />
 
-      {/* ── Short scrim behind the copyright strip, where the gradient is warmest ── */}
+      {/* ── Short scrim behind the copyright strip ── */}
       <div
         aria-hidden
+        className="footer-scrim-bottom"
         style={{
           position: "absolute",
           left: 0,
@@ -154,8 +161,6 @@ export default function Footer() {
           height: "16%",
           zIndex: 1,
           pointerEvents: "none",
-          background:
-            "linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.28) 45%, rgba(0,0,0,0.55) 100%)",
         }}
       />
 
@@ -191,13 +196,13 @@ export default function Footer() {
 
       {/* ── Content overlay ── */}
       <div
+        className="min-h-[auto] md:min-h-screen"
         style={{
           position: "relative",
           zIndex: 2,
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          minHeight: "100vh",
         }}
       >
         {/* Top: footer links */}
@@ -212,7 +217,7 @@ export default function Footer() {
               The four-column track was being forced onto phones, squeezing the
               link columns down to ~45px wide. */}
           <div
-            className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-[2.5fr_1fr_1fr_1fr] gap-8 md:gap-8"
+            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-[2.5fr_1fr_1fr_1fr] gap-x-6 gap-y-9 md:gap-8"
             style={{
               maxWidth: "1280px",
               margin: "0 auto",
@@ -220,7 +225,7 @@ export default function Footer() {
             }}
           >
             {/* Brand column — full width until the four-track layout kicks in */}
-            <div className="sm:col-span-3 md:col-span-1">
+            <div className="col-span-2 sm:col-span-3 md:col-span-1">
               <h2 style={{ marginBottom: "1.25rem", lineHeight: 0 }}>
                 <Image
                   src="/images/logo-repute-white.png"
@@ -273,9 +278,10 @@ export default function Footer() {
               </a>
             </div>
 
-            {/* Link columns */}
+            {/* Link columns — two across on phones so the footer reads as a block
+                rather than one long stack; the four-track layout takes over at md. */}
             {Object.values(footerLinks).map((col) => (
-              <div key={col.title}>
+              <div key={col.title} className="min-w-0">
                 <h4
                   style={{
                     fontFamily: '"PP Neue Montreal", sans-serif',
@@ -379,6 +385,30 @@ export default function Footer() {
       </div>
 
       <style>{`
+        /* Desktop: the image's own falloff carries most of the contrast. */
+        footer .footer-scrim-top {
+          background: linear-gradient(180deg,
+            rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.45) 25%,
+            rgba(0,0,0,0.2) 45%, rgba(0,0,0,0) 65%);
+        }
+        footer .footer-scrim-bottom {
+          background: linear-gradient(180deg,
+            rgba(0,0,0,0) 0%, rgba(0,0,0,0.2) 45%, rgba(0,0,0,0.42) 100%);
+        }
+        /* Phones: the footer is roughly a third as tall, so every link sits over
+           the photo's bright middle rather than above it. Hold the whole panel
+           down and let only the lower third of the image come through. */
+        @media (max-width: 767px) {
+          footer .footer-scrim-top {
+            background: linear-gradient(180deg,
+              rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.88) 35%,
+              rgba(0,0,0,0.78) 60%, rgba(0,0,0,0.55) 85%, rgba(0,0,0,0.4) 100%);
+          }
+          footer .footer-scrim-bottom {
+            background: linear-gradient(180deg,
+              rgba(0,0,0,0) 0%, rgba(0,0,0,0.3) 45%, rgba(0,0,0,0.6) 100%);
+          }
+        }
         footer .footer-link-arrow {
           display: inline-block;
           width: 0;

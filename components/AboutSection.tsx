@@ -68,11 +68,9 @@ export default function AboutSection() {
   return (
     <section
       id="about"
-      className="px-6 md:px-10 lg:px-14"
+      className="px-6 md:px-10 lg:px-14 py-14 md:py-20"
       style={{
         backgroundColor: "#000",
-        paddingTop: "5rem",
-        paddingBottom: "5rem",
       }}
     >
       <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
@@ -94,31 +92,33 @@ export default function AboutSection() {
         <div
           className="grid grid-cols-1 md:grid-cols-[1fr_1.6fr_4.2fr] gap-3 mb-3"
         >
-          {/* ── Col 1: Stat cards (stacked) ── */}
-          <div className="grid grid-cols-3 md:grid-cols-1 gap-3">
+          {/* ── Col 1: Stat cards ──
+              One per row on phones with the number and label side by side. Three
+              across at 375px left each card ~100px, so labels broke onto three
+              lines beside an oversized figure. */}
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-3">
             {t.stats.map((stat) => (
               <div
                 key={stat.label}
+                className="flex flex-row md:flex-col items-center md:items-start gap-4 md:gap-0 px-5 py-4 md:p-6"
                 style={{
                   flex: 1,
                   backgroundColor: "rgba(255,255,255,0.04)",
                   border: "1px solid rgba(255,255,255,0.08)",
                   borderRadius: "12px",
-                  padding: "1.5rem",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
+                  justifyContent: "flex-start",
                 }}
               >
                 <div
+                  className="text-[2.1rem] md:text-[clamp(2rem,3.5vw,3rem)] md:mb-[0.4rem]"
                   style={{
                     fontFamily: '"PP Neue Montreal", sans-serif',
                     fontWeight: 700,
-                    fontSize: "clamp(2rem, 3.5vw, 3rem)",
                     letterSpacing: "-0.03em",
                     color: "#ffffff",
                     lineHeight: 1,
-                    marginBottom: "0.4rem",
+                    flexShrink: 0,
+                    minWidth: "3.2rem",
                   }}
                 >
                   {stat.value}
@@ -127,9 +127,10 @@ export default function AboutSection() {
                   style={{
                     fontFamily: '"PP Neue Montreal", sans-serif',
                     fontWeight: 400,
-                    fontSize: "0.78rem",
+                    fontSize: "0.85rem",
                     color: "rgba(255,255,255,0.5)",
                     letterSpacing: "0.02em",
+                    lineHeight: 1.35,
                   }}
                 >
                   {stat.label}
@@ -240,8 +241,8 @@ export default function AboutSection() {
               flexDirection: "column",
             }}
           >
-            {/* Top text */}
-            <div style={{ padding: "1.75rem 1.75rem 0" }}>
+            {/* Top text — centred over the globe, matching the reference layout */}
+            <div className="text-left md:text-center" style={{ padding: "1.75rem 1.75rem 0" }}>
               <div
                 style={{
                   fontFamily: '"PP Neue Montreal", sans-serif',
@@ -253,7 +254,7 @@ export default function AboutSection() {
               >
                 {t.basedIn}
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+              <div className="flex items-center gap-[0.4rem] md:justify-center">
                 <div
                   style={{
                     width: "7px",
@@ -277,11 +278,12 @@ export default function AboutSection() {
               </div>
             </div>
 
-            {/* Globe — centred and sized to the card. The old fixed 800px canvas
-                was pinned with a negative offset, which cropped it badly on phones. */}
+            {/* Globe — matches the reference: horizontally centred, about 82% of
+                the card's width, and cropped by the card's lower edge rather than
+                bleeding out the sides. */}
             <div
               data-globe-frame
-              className="min-h-[300px] md:min-h-[380px]"
+              className="min-h-[300px] md:min-h-[430px]"
               style={{
                 flex: 1,
                 position: "relative",
@@ -289,10 +291,10 @@ export default function AboutSection() {
               }}
             >
               <div
-                className="absolute left-1/2 -translate-x-1/2 bottom-[-18%] md:bottom-[-120px] md:left-1/2 md:-translate-x-[45%]"
+                className="absolute left-1/2 -translate-x-1/2 top-[14%] md:top-[8%]"
                 style={{ lineHeight: 0 }}
               >
-                <GlobeComponent />
+                <GlobeComponent ratio={0.82} />
               </div>
             </div>
           </div>

@@ -163,7 +163,10 @@ function drawLines(
 }
 
 /* ── Component ── */
-export default function GlobeComponent({ size }: { size?: number } = {}) {
+export default function GlobeComponent({
+  size,
+  ratio = 1,
+}: { size?: number; ratio?: number } = {}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const overlayRef = useRef<HTMLCanvasElement>(null);
   /* Rendered at a fixed 800px before, which is over twice the width of a phone
@@ -197,14 +200,14 @@ export default function GlobeComponent({ size }: { size?: number } = {}) {
     const el = canvasRef.current?.closest("[data-globe-frame]") as HTMLElement | null;
     if (!el) return;
     const measure = () => {
-      const w = el.getBoundingClientRect().width;
-      if (w > 0) setBox(Math.round(Math.min(Math.max(w, 260), 800)));
+      const w = el.getBoundingClientRect().width * ratio;
+      if (w > 0) setBox(Math.round(Math.min(Math.max(w, 260), 900)));
     };
     measure();
     const ro = new ResizeObserver(measure);
     ro.observe(el);
     return () => ro.disconnect();
-  }, [size]);
+  }, [size, ratio]);
 
   /* Cobe globe + overlay render loop */
   useEffect(() => {
