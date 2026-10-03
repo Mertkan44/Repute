@@ -8,87 +8,24 @@ const label = {
   fr: "( De Mèche )",
 };
 
+// Cut from the RE:PUTE 2026 deck (white-on-black), rendered black here via
+// brightness(0). Heights are tuned per logo so they read at a similar weight.
 const logos = [
-  {
-    name: "KIMFU",
-    src: "/images/client-kimfu.png",
-    width: 80,
-    height: 34,
-    filter: "invert(1)",
-    href: "https://www.kimfuagence.com/",
-  },
-  {
-    name: "Enzo Drew",
-    src: "/images/client-enzo.png",
-    width: 73,
-    height: 44,
-    filter: "invert(1)",
-    href: "https://www.enzodrew.com",
-  },
-  {
-    name: "SLASH Media House",
-    src: "/images/client-slash.png",
-    width: 130,
-    height: 30,
-    filter: "brightness(0)",
-    href: "https://www.slashmediahouse.com/",
-  },
-  {
-    name: "Boombox",
-    src: "/images/client-boombox.svg",
-    width: 130,
-    height: 16,
-    filter: "invert(1)",
-    href: "https://www.boomboxgroup.com/",
-  },
-  {
-    name: "FHG",
-    src: "/images/client-fhg.png",
-    width: 149,
-    height: 38,
-    filter: "brightness(0)",
-    href: "#",
-  },
-  {
-    name: "Major",
-    src: "/images/client-glyf.svg",
-    width: 96,
-    height: 74,
-    filter: "brightness(0)",
-    href: "https://thiswasmajor.com",
-  },
-  {
-    name: "Red Bull Media House",
-    src: "/images/client-redbull.png",
-    width: 95,
-    height: 44,
-    filter: "none",
-    href: "https://www.redbullmediahouse.com/en/",
-  },
-  {
-    name: "Workisplay",
-    src: "/images/client-workisplay.svg",
-    width: 169,
-    height: 30,
-    filter: "none",
-    href: "https://workisplay.studio/",
-  },
-  {
-    name: "Kastle",
-    src: "/images/client-mom.svg",
-    width: 150,
-    height: 21,
-    filter: "brightness(0)",
-    href: "https://www.kastle.ai/",
-  },
-  {
-    name: "ORKESTRA",
-    src: "/images/client-orkestra.png",
-    width: 149,
-    height: 47,
-    filter: "brightness(0)",
-    href: "https://orkestra.ca/en/",
-  },
+  { name: "Acun Medya Akademi", src: "/images/clients/acunmedya.png", width: 92, height: 64 },
+  { name: "TikTok", src: "/images/clients/tiktok.png", width: 113, height: 30 },
+  { name: "Beylikdüzü Belediyesi", src: "/images/clients/beylikduzu.png", width: 60, height: 58 },
+  { name: "Roberto Bravo", src: "/images/clients/roberto-bravo.png", width: 113, height: 40 },
+  { name: "ASUS", src: "/images/clients/asus.png", width: 111, height: 28 },
+  { name: "Garanti BBVA", src: "/images/clients/garanti-bbva.png", width: 133, height: 28 },
+  { name: "The NewLab", src: "/images/clients/newlab.png", width: 118, height: 40 },
+  { name: "Kebo", src: "/images/clients/kebo.png", width: 77, height: 52 },
+  { name: "Kolektif House", src: "/images/clients/kolektif-house.png", width: 133, height: 18 },
+  { name: "PIN Drinks", src: "/images/clients/pin-drinks.png", width: 104, height: 48 },
+  { name: "hypers", src: "/images/clients/hypers.png", width: 107, height: 38 },
+  { name: "Hilltown Cyprus", src: "/images/clients/hilltown.png", width: 72, height: 62 },
+  { name: "Månensøl", src: "/images/clients/manensol.png", width: 117, height: 22 },
+  { name: "RAICA", src: "/images/clients/raica.png", width: 114, height: 40 },
+  { name: "meet2talk", src: "/images/clients/meet2talk.png", width: 137, height: 28 },
 ];
 
 export default function ClientLogosSection() {
@@ -191,76 +128,52 @@ export default function ClientLogosSection() {
             alignItems: "center",
             gap: "150px",
             width: "max-content",
-            animation: "marquee-scroll 35s linear infinite",
+            animation: "marquee-scroll 51s linear infinite",
           }}
         >
           {/* First set */}
           {logos.map((logo) => (
-            <a
+            <div
               key={logo.name}
-              href={logo.href}
-              target="_blank"
-              rel="noopener noreferrer"
               style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
+                position: "relative",
+                width: logo.width,
+                height: logo.height,
                 flexShrink: 0,
-                textDecoration: "none",
+                filter: "brightness(0)",
               }}
             >
-              <div
-                style={{
-                  position: "relative",
-                  width: logo.width,
-                  height: logo.height,
-                  filter: logo.filter !== "none" ? logo.filter : undefined,
-                }}
-              >
-                <Image
-                  src={logo.src}
-                  alt={logo.name}
-                  fill
-                  style={{ objectFit: "contain" }}
-                  sizes={`${logo.width}px`}
-                />
-              </div>
-            </a>
+              <Image
+                src={logo.src}
+                alt={logo.name}
+                fill
+                style={{ objectFit: "contain" }}
+                sizes={`${logo.width}px`}
+              />
+            </div>
           ))}
 
           {/* Duplicate set for seamless loop */}
           {logos.map((logo) => (
-            <a
+            <div
               key={`${logo.name}-dup`}
-              href={logo.href}
-              target="_blank"
-              rel="noopener noreferrer"
               aria-hidden
               style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
+                position: "relative",
+                width: logo.width,
+                height: logo.height,
                 flexShrink: 0,
-                textDecoration: "none",
+                filter: "brightness(0)",
               }}
             >
-              <div
-                style={{
-                  position: "relative",
-                  width: logo.width,
-                  height: logo.height,
-                  filter: logo.filter !== "none" ? logo.filter : undefined,
-                }}
-              >
-                <Image
-                  src={logo.src}
-                  alt=""
-                  fill
-                  style={{ objectFit: "contain" }}
-                  sizes={`${logo.width}px`}
-                />
-              </div>
-            </a>
+              <Image
+                src={logo.src}
+                alt=""
+                fill
+                style={{ objectFit: "contain" }}
+                sizes={`${logo.width}px`}
+              />
+            </div>
           ))}
         </div>
       </div>
