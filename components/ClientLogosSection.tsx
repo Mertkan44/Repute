@@ -122,11 +122,10 @@ export default function ClientLogosSection() {
 
         {/* Scrolling track */}
         <div
-          className="marquee-track"
+          className="marquee-track gap-14 md:gap-[150px]"
           style={{
             display: "flex",
             alignItems: "center",
-            gap: "150px",
             width: "max-content",
             animation: "marquee-scroll 51s linear infinite",
           }}
