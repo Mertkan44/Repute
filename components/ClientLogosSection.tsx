@@ -11,22 +11,17 @@ const label = {
 // Cut from the RE:PUTE 2026 deck (white-on-black), rendered black here via
 // brightness(0). Heights are tuned per logo so they read at a similar weight.
 const logos = [
-  { name: "Acun Medya Akademi", src: "/images/clients/acunmedya.png", width: 92, height: 64 },
-  { name: "TikTok", src: "/images/clients/tiktok.png", width: 113, height: 30 },
-  { name: "Beylikdüzü Belediyesi", src: "/images/clients/beylikduzu.png", width: 60, height: 58 },
-  { name: "Roberto Bravo", src: "/images/clients/roberto-bravo.png", width: 113, height: 40 },
-  { name: "ASUS", src: "/images/clients/asus.png", width: 111, height: 28 },
-  { name: "Garanti BBVA", src: "/images/clients/garanti-bbva.png", width: 133, height: 28 },
-  { name: "The NewLab", src: "/images/clients/newlab.png", width: 118, height: 40 },
-  { name: "Kebo", src: "/images/clients/kebo.png", width: 77, height: 52 },
-  { name: "Kolektif House", src: "/images/clients/kolektif-house.png", width: 133, height: 18 },
-  { name: "PIN Drinks", src: "/images/clients/pin-drinks.png", width: 104, height: 48 },
-  { name: "hypers", src: "/images/clients/hypers.png", width: 107, height: 38 },
-  { name: "Hilltown Cyprus", src: "/images/clients/hilltown.png", width: 72, height: 62 },
-  { name: "Månensøl", src: "/images/clients/manensol.png", width: 117, height: 22 },
-  { name: "RAICA", src: "/images/clients/raica.png", width: 114, height: 40 },
-  { name: "meet2talk", src: "/images/clients/meet2talk.png", width: 137, height: 28 },
+  { name: "TikTok Türkiye", src: "/images/clients/tiktok.png", width: 173, height: 46 },
+  { name: "Garanti BBVA", src: "/images/clients/garanti-bbva.png", width: 211, height: 44 },
+  { name: "Beylikdüzü Belediyesi", src: "/images/clients/beylikduzu.png", width: 87, height: 84 },
+  { name: "hypers", src: "/images/clients/hypers.png", width: 158, height: 56 },
+  { name: "PIN Drinks", src: "/images/clients/pin-drinks.png", width: 151, height: 70 },
+  { name: "Roberto Bravo", src: "/images/clients/roberto-bravo.png", width: 169, height: 60 },
 ];
+
+// One half of the marquee. The list is short, so it's repeated to stay wider
+// than large screens; the track holds two halves and slides by -50%.
+const half = [...logos, ...logos];
 
 export default function ClientLogosSection() {
   const { lang } = useLanguage();
@@ -120,9 +115,11 @@ export default function ClientLogosSection() {
           }}
         />
 
-        {/* Scrolling track */}
+        {/* Scrolling track — spacing is a trailing margin rather than flex
+            gap so each half is exactly one period and the loop doesn't jump.
+            Logos render at 75% on phones. */}
         <div
-          className="marquee-track gap-14 md:gap-[150px]"
+          className="marquee-track [--logo-scale:0.75] md:[--logo-scale:1]"
           style={{
             display: "flex",
             alignItems: "center",
@@ -130,50 +127,30 @@ export default function ClientLogosSection() {
             animation: "marquee-scroll 51s linear infinite",
           }}
         >
-          {/* First set */}
-          {logos.map((logo) => (
-            <div
-              key={logo.name}
-              style={{
-                position: "relative",
-                width: logo.width,
-                height: logo.height,
-                flexShrink: 0,
-                filter: "brightness(0)",
-              }}
-            >
-              <Image
-                src={logo.src}
-                alt={logo.name}
-                fill
-                style={{ objectFit: "contain" }}
-                sizes={`${logo.width}px`}
-              />
-            </div>
-          ))}
-
-          {/* Duplicate set for seamless loop */}
-          {logos.map((logo) => (
-            <div
-              key={`${logo.name}-dup`}
-              aria-hidden
-              style={{
-                position: "relative",
-                width: logo.width,
-                height: logo.height,
-                flexShrink: 0,
-                filter: "brightness(0)",
-              }}
-            >
-              <Image
-                src={logo.src}
-                alt=""
-                fill
-                style={{ objectFit: "contain" }}
-                sizes={`${logo.width}px`}
-              />
-            </div>
-          ))}
+          {[0, 1].map((copy) =>
+            half.map((logo, i) => (
+              <div
+                key={`${copy}-${i}`}
+                aria-hidden={copy === 1 || i >= logos.length || undefined}
+                className="mr-14 md:mr-[150px]"
+                style={{
+                  position: "relative",
+                  width: `calc(${logo.width}px * var(--logo-scale))`,
+                  height: `calc(${logo.height}px * var(--logo-scale))`,
+                  flexShrink: 0,
+                  filter: "brightness(0)",
+                }}
+              >
+                <Image
+                  src={logo.src}
+                  alt={copy === 0 && i < logos.length ? logo.name : ""}
+                  fill
+                  style={{ objectFit: "contain" }}
+                  sizes={`${logo.width}px`}
+                />
+              </div>
+            ))
+          )}
         </div>
       </div>
 
