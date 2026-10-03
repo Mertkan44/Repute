@@ -91,28 +91,28 @@ export default function ClientLogosSection() {
           overflow: "hidden",
         }}
       >
-        {/* Left fade mask */}
+        {/* Left fade mask — narrow on phones so it doesn't wash out the strip */}
         <div
+          className="w-12 md:w-[200px]"
           style={{
             position: "absolute",
             left: 0,
             top: 0,
             bottom: 0,
-            width: "200px",
             background:
               "linear-gradient(to right, #f5f0e9 0%, transparent 100%)",
             zIndex: 2,
             pointerEvents: "none",
           }}
         />
-        {/* Right fade mask */}
+        {/* Right fade mask — narrow on phones so it doesn't wash out the strip */}
         <div
+          className="w-12 md:w-[200px]"
           style={{
             position: "absolute",
             right: 0,
             top: 0,
             bottom: 0,
-            width: "200px",
             background:
               "linear-gradient(to left, #f5f0e9 0%, transparent 100%)",
             zIndex: 2,
