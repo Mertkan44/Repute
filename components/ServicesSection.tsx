@@ -112,9 +112,9 @@ const servicesByLang = {
 
 const media = {
   social: {
-    videoMov: "/videos/services-social.mov",
-    videoWebm: "/videos/services-social.webm",
-    image: "/images/services-social.png",
+    videoMov: "/videos/services-search.mov",
+    videoWebm: "/videos/services-search.webm",
+    image: "/images/services-search.png",
     imageAlt: "Social media strategy",
     accent: "#ffffff",
   },
