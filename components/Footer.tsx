@@ -131,7 +131,12 @@ export default function Footer() {
           alt=""
           fill
           priority={false}
-          sizes="100vw"
+          /* The footer is about a screen tall and the image is 3:1, so `cover`
+             fills it by height and draws it ~3x the viewport height wide on
+             anything narrower than 3:1. Saying 100vw made Next pick a 1920w
+             file and stretch it. Quality 90 keeps the particle dots crisp. */
+          sizes="(min-aspect-ratio: 3/1) 100vw, 300vh"
+          quality={90}
           style={{ objectFit: "cover", objectPosition: "center" }}
         />
       </div>
