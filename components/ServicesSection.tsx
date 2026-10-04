@@ -119,9 +119,9 @@ const media = {
     accent: "#ffffff",
   },
   influencer: {
-    videoMov: "/videos/services-influencer.mov",
-    videoWebm: "/videos/services-influencer.webm",
-    image: "/images/services-influencer.png",
+    videoMov: "/videos/services-cube.mov",
+    videoWebm: "/videos/services-cube.webm",
+    image: "/images/services-cube.png",
     imageAlt: "Influencer collaboration",
     accent: "#ffffff",
   },
