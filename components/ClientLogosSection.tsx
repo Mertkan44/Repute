@@ -11,7 +11,9 @@ const label = {
 // Cut from the RE:PUTE 2026 deck (white-on-black), rendered black here via
 // brightness(0). Heights are tuned per logo so they read at a similar weight.
 const logos = [
+  { name: "EFES", src: "/images/clients/efes.png", width: 120, height: 40 },
   { name: "TikTok Türkiye", src: "/images/clients/tiktok.png", width: 173, height: 46 },
+  { name: "Amasya Et Ürünleri", src: "/images/clients/amasya.png", width: 99, height: 84 },
   { name: "Garanti BBVA", src: "/images/clients/garanti-bbva.png", width: 211, height: 44 },
   { name: "Beylikdüzü Belediyesi", src: "/images/clients/beylikduzu.png", width: 87, height: 84 },
   { name: "hypers", src: "/images/clients/hypers.png", width: 158, height: 56 },
@@ -124,7 +126,7 @@ export default function ClientLogosSection() {
             display: "flex",
             alignItems: "center",
             width: "max-content",
-            animation: "marquee-scroll 51s linear infinite",
+            animation: "marquee-scroll 66s linear infinite",
           }}
         >
           {[0, 1].map((copy) =>
