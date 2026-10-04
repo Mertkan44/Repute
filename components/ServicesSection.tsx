@@ -126,9 +126,9 @@ const media = {
     accent: "#ffffff",
   },
   performance: {
-    videoMov: "/videos/services-performance.mov",
-    videoWebm: "/videos/services-performance.webm",
-    image: "/images/services-performance.png",
+    videoMov: "/videos/services-robot.mov",
+    videoWebm: "/videos/services-robot.webm",
+    image: "/images/services-robot.png",
     imageAlt: "Performance marketing",
     accent: "#ffffff",
   },
