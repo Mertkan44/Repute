@@ -171,36 +171,6 @@ export default function Footer() {
         }}
       />
 
-      {/* ── Oversized wordmark filling the empty lower half. `overlay` blending
-           lets the gradient read through the letterforms instead of sitting
-           flatly on top of it. ── */}
-      <div
-        aria-hidden
-        className="hidden md:block footer-wordmark"
-        style={{
-          position: "absolute",
-          left: 0,
-          right: 0,
-          /* Sits fully inside the footer, clear of the copyright row. It used to
-             be pushed past the bottom edge, so scrolling to the end left it
-             cropped and unreadable. */
-          bottom: "4.5rem",
-          zIndex: 1,
-          pointerEvents: "none",
-          textAlign: "center",
-          lineHeight: 0.9,
-          fontFamily: '"PP Neue Montreal", sans-serif',
-          fontWeight: 700,
-          fontSize: "15vw",
-          letterSpacing: "-0.04em",
-          color: "rgba(255,255,255,0.20)",
-          mixBlendMode: "overlay",
-          userSelect: "none",
-        }}
-      >
-        RÉPUTÉ
-      </div>
-
       {/* ── Content overlay ── */}
       <div
         className="min-h-[auto] md:min-h-screen"
