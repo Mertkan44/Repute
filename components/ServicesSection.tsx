@@ -112,23 +112,23 @@ const servicesByLang = {
 
 const media = {
   social: {
-    videoMov: "/videos/services-social.mov",
-    videoWebm: "/videos/services-social.webm",
-    image: "/images/services-social.png",
+    videoMov: "/videos/services-search.mov",
+    videoWebm: "/videos/services-search.webm",
+    image: "/images/services-search.png",
     imageAlt: "Social media strategy",
     accent: "#ffffff",
   },
   influencer: {
-    videoMov: "/videos/services-influencer.mov",
-    videoWebm: "/videos/services-influencer.webm",
-    image: "/images/services-influencer.png",
+    videoMov: "/videos/services-cube.mov",
+    videoWebm: "/videos/services-cube.webm",
+    image: "/images/services-cube.png",
     imageAlt: "Influencer collaboration",
     accent: "#ffffff",
   },
   performance: {
-    videoMov: "/videos/services-performance.mov",
-    videoWebm: "/videos/services-performance.webm",
-    image: "/images/services-performance.png",
+    videoMov: "/videos/services-robot.mov",
+    videoWebm: "/videos/services-robot.webm",
+    image: "/images/services-robot.png",
     imageAlt: "Performance marketing",
     accent: "#ffffff",
   },

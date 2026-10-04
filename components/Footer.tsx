@@ -119,17 +119,24 @@ export default function Footer() {
         backgroundColor: "#000",
       }}
     >
-      {/* ── Background image. Its own falloff does most of the work: the top and
-           bottom fifths average 2–3/255, so the copy sits on near-black without
-           needing a heavy scrim. The gradient shader and the swing footage are
-           both still available if this is ever swapped back. ── */}
+      {/* ── Background image. Its own falloff does most of the work: the top
+           fifth is pure black and the terrain only rises past the middle, so the
+           copy sits on black without needing a heavy scrim. The bright band is at
+           the bottom, which the copyright strip's own scrim covers. The gradient
+           shader and the swing footage are both still available if this is ever
+           swapped back. ── */}
       <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
         <Image
-          src="/images/footer-bg.png"
+          src="/images/footer-landscape.webp"
           alt=""
           fill
           priority={false}
-          sizes="100vw"
+          /* The footer is about a screen tall and the image is 3:1, so `cover`
+             fills it by height and draws it ~3x the viewport height wide on
+             anything narrower than 3:1. Saying 100vw made Next pick a 1920w
+             file and stretch it. Quality 90 keeps the particle dots crisp. */
+          sizes="(min-aspect-ratio: 3/1) 100vw, 300vh"
+          quality={90}
           style={{ objectFit: "cover", objectPosition: "center" }}
         />
       </div>
