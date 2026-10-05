@@ -302,7 +302,7 @@ export default function AboutSection() {
 
         {/* Bottom row: Rana photo | bio */}
         <div className="grid grid-cols-1 md:grid-cols-[1fr_3fr] gap-3">
-          {/* Rana photo placeholder */}
+          {/* Rana photo */}
           <div
             className="min-h-[300px] md:min-h-[400px]"
             style={{
@@ -311,22 +311,17 @@ export default function AboutSection() {
               borderRadius: "12px",
               overflow: "hidden",
               position: "relative",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
             }}
           >
-            {/* TODO: swap for a real photo of Rana at /images/rana.png */}
-            <span
-              style={{
-                fontFamily: '"PP Neue Montreal", sans-serif',
-                fontWeight: 700,
-                fontSize: "clamp(3rem, 6vw, 4.5rem)",
-                color: "rgba(255,255,255,0.15)",
-              }}
-            >
-              RY
-            </span>
+            <Image
+              src="/images/founder-rana.webp"
+              alt={`${t.founderName}, ${t.founderTitle}`}
+              fill
+              sizes="(max-width: 768px) 100vw, 25vw"
+              /* Portrait 3:4. Biased toward the top so the face stays in frame
+                 when the card is wider than the photo (phones). */
+              style={{ objectFit: "cover", objectPosition: "center 25%" }}
+            />
             {/* Gradient overlay */}
             <div
               style={{
