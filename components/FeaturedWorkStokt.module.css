@@ -50,6 +50,10 @@
 .arrows button { width: 36px; height: 36px; border: 1px solid #1113; border-radius: 50%; cursor: pointer; transition: background .2s; }
 .arrows button:hover { background: #e1ddd5; }
 .filmTitle { font-size: 1rem; line-height: 1.35; margin: 12px 0 18px; }
+.instagramLink { display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 44px; padding: 10px 16px; margin-bottom: 18px; border: 1px solid #1113; border-radius: 8px; font-size: .8rem; line-height: 1.4; text-decoration: none; transition: background .2s, color .2s, border-color .2s; }
+.instagramLink svg { width: 18px; height: 18px; flex-shrink: 0; }
+.instagramLink > span { margin-left: auto; font-size: 1.1rem; }
+.instagramLink:hover { background: #181716; border-color: #181716; color: #fff; }
 .playlist { display: flex; flex-direction: column; gap: 6px; }
 .playlistItem { min-width: 0; display: flex; align-items: center; gap: 12px; padding: 7px; text-align: left; border: 1px solid transparent; border-radius: 8px; cursor: pointer; transition: background .2s, border-color .2s; }
 .playlistItem:hover { background: #e9e5dd; }

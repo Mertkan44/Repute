@@ -15,6 +15,7 @@ const copy = {
     previous: 'Previous film', next: 'Next film', selected: 'Selected films',
     soundOn: 'Sound on', soundOff: 'Sound off', loading: 'Loading film…',
     error: 'This film could not be loaded.', download: 'Open video',
+    instagram: 'Watch on Instagram', newTab: 'opens in a new tab',
     hint: '← → Browse films · Esc to close',
   },
   fr: {
@@ -23,6 +24,7 @@ const copy = {
     previous: 'Film précédent', next: 'Film suivant', selected: 'Sélection de films',
     soundOn: 'Activer le son', soundOff: 'Couper le son', loading: 'Chargement du film…',
     error: 'Ce film n’a pas pu être chargé.', download: 'Ouvrir la vidéo',
+    instagram: 'Voir sur Instagram', newTab: 's’ouvre dans un nouvel onglet',
     hint: '← → Parcourir les films · Échap pour fermer',
   },
 };
@@ -149,6 +151,22 @@ function ProjectGallery({ projectIndex, filmIndex, onSelect, onClose, reducedMot
             </div>}
           </div>
           <p className={styles.filmTitle} aria-live="polite">{film.title[lang]}</p>
+          <a
+            className={styles.instagramLink}
+            href={`https://www.instagram.com/reel/${film.id}/`}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`${t.instagram}: ${film.title[lang]} (${t.newTab})`}
+            onClick={() => videoRef.current?.pause()}
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+              <rect x="3" y="3" width="18" height="18" rx="5" />
+              <circle cx="12" cy="12" r="4" />
+              <circle cx="17.4" cy="6.7" r="1" fill="currentColor" stroke="none" />
+            </svg>
+            {t.instagram}
+            <span aria-hidden="true">↗</span>
+          </a>
           <div className={styles.playlist} aria-label={project.name}>
             {project.films.map((item, index) => (
               <button key={item.id} className={styles.playlistItem} aria-pressed={filmIndex === index} onClick={() => onSelect({ project: projectIndex, film: index })}>
