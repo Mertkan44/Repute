@@ -1,0 +1,97 @@
+.section { padding: 5rem 3.5rem; font-family: "PP Neue Montreal", sans-serif; color: #111; }
+.container { max-width: 1280px; margin: 0 auto; }
+.headingRow { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 2.75rem; }
+.eyebrow { font-family: "PP Supply Mono", monospace; font-size: .65rem; line-height: 1.6; letter-spacing: .1em; text-transform: uppercase; color: #666; }
+.heading { font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 700; letter-spacing: -.035em; line-height: 1.1; margin-top: .75rem; }
+.allWork { display: flex; gap: 1.75rem; align-items: center; padding: .6rem 0; border-bottom: 1px solid #a6a29b; font-size: .875rem; cursor: pointer; }
+.allWork span { font-size: 1.5rem; transition: transform .25s; }
+.allWork:hover span { transform: translate(3px, -3px); }
+.grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 18px; }
+.card { position: relative; min-width: 0; height: clamp(360px, 35vw, 480px); overflow: hidden; border: 0; border-radius: 12px; background: #26221e; text-align: left; color: #fff; cursor: pointer; isolation: isolate; }
+.wide { grid-column: span 8; }
+.narrow { grid-column: span 4; }
+.cover { object-fit: cover; transition: transform .8s cubic-bezier(.22, 1, .36, 1); }
+.card:hover .cover { transform: scale(1.045); }
+.shade { position: absolute; inset: 0; background: linear-gradient(180deg, #0003 0%, transparent 35%, #0002 53%, #000d 100%); }
+.count { position: absolute; top: 24px; left: 24px; border: 1px solid #ffffff63; background: #15151535; backdrop-filter: blur(8px); border-radius: 20px; padding: 7px 12px; font-family: "PP Supply Mono", monospace; font-size: .65rem; text-transform: uppercase; letter-spacing: .08em; }
+.play { position: absolute; top: 24px; right: 24px; width: 48px; height: 48px; border-radius: 50%; border: 1px solid #ffffff80; background: #ffffff17; backdrop-filter: blur(8px); display: grid; place-items: center; transition: background .25s, color .25s, transform .25s; }
+.play svg { width: 20px; height: 20px; }
+.card:hover .play { color: #111; background: #fff; transform: rotate(-8deg); }
+.cardInfo { position: absolute; left: 28px; bottom: 25px; right: 25px; display: flex; flex-direction: column; align-items: flex-start; }
+.category { font-family: "PP Supply Mono", monospace; text-transform: uppercase; font-size: .6rem; letter-spacing: .08em; color: #ffffffe0; line-height: 1.6; }
+.brand { font-size: clamp(1.6rem, 2.6vw, 2.4rem); font-weight: 500; line-height: 1.12; letter-spacing: -.035em; margin-top: 8px; }
+.watch { display: flex; align-items: center; gap: 16px; font-size: .75rem; margin-top: 18px; color: #ffffffd9; }
+.watch > span { font-size: 1.2rem; }
+.dialog { padding: 0; width: min(1100px, calc(100vw - 40px)); max-width: none; max-height: calc(100dvh - 40px); margin: auto; overflow-x: hidden; overflow-y: auto; border: 0; border-radius: 18px; background: #f3f0e9; color: #181716; box-shadow: 0 24px 100px #0006; font-family: "PP Neue Montreal", sans-serif; overscroll-behavior: contain; }
+.dialog::backdrop { background: #080808d6; backdrop-filter: blur(12px); animation: backdropEnter .3s ease both; }
+.galleryHeader { position: sticky; top: 0; z-index: 3; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; background: #f3f0e9; border-bottom: 1px solid #11111112; }
+.total { color: #9b9892; margin-left: 8px; }
+.close { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid #1113; border-radius: 50%; background: transparent; font-size: 17px; cursor: pointer; transition: background .2s, color .2s; }
+.close:hover { color: #fff; background: #181716; }
+.brandTabs { display: flex; gap: 6px; padding: 14px 24px; overflow-x: auto; border-bottom: 1px solid #11111112; scrollbar-width: thin; }
+.brandTabs button { flex-shrink: 0; display: flex; align-items: center; gap: 10px; padding: 10px 13px; border-radius: 6px; font-size: .75rem; color: #666; cursor: pointer; transition: background .2s, color .2s; }
+.brandTabs button span { font-family: "PP Supply Mono", monospace; font-size: .55rem; opacity: .65; }
+.brandTabs button[aria-pressed="true"] { color: #fff; background: #181716; }
+.brandTabs button:hover:not([aria-pressed="true"]) { background: #e5e1d9; color: #181716; }
+.galleryBody { display: grid; grid-template-columns: 1.05fr 1fr; }
+.stage { display: flex; align-items: center; justify-content: center; min-width: 0; height: min(66dvh, 640px); min-height: 430px; padding: 20px; background: radial-gradient(ellipse at center, #302923, #141312 80%); overflow: hidden; }
+.film { position: relative; height: 100%; aspect-ratio: 9 / 16; max-width: 100%; border-radius: 10px; background: #0a0a0a; overflow: hidden; box-shadow: 0 10px 40px #0005; }
+.film video { width: 100%; height: 100%; display: block; object-fit: contain; }
+.sound { position: absolute; top: 12px; right: 12px; display: flex; gap: 12px; align-items: center; color: #fff; background: #131313b3; border: 1px solid #ffffff40; backdrop-filter: blur(10px); border-radius: 22px; padding: 9px 12px; font-size: .65rem; cursor: pointer; }
+.sound > span { font-size: 1rem; line-height: 1; }
+.loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); white-space: nowrap; padding: 10px 16px; background: #000b; border-radius: 6px; color: #fff; font-size: .75rem; pointer-events: none; }
+.playerError { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 15px; padding: 24px; text-align: center; color: #fff; background: #111e; font-size: .9rem; }
+.playerError a { text-decoration: underline; }
+.details { min-width: 0; padding: 32px; }
+.projectTitle { margin-top: 12px; font-size: clamp(1.8rem, 2.8vw, 2.75rem); font-weight: 500; line-height: 1.05; letter-spacing: -.04em; }
+.description { margin: 18px 0 24px; max-width: 36ch; font-size: .875rem; line-height: 1.65; color: #6c6760; }
+.filmHeading { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding-top: 20px; border-top: 1px solid #1112; }
+.arrows { display: flex; gap: 6px; }
+.arrows button { width: 36px; height: 36px; border: 1px solid #1113; border-radius: 50%; cursor: pointer; transition: background .2s; }
+.arrows button:hover { background: #e1ddd5; }
+.filmTitle { font-size: 1rem; line-height: 1.35; margin: 12px 0 18px; }
+.playlist { display: flex; flex-direction: column; gap: 6px; }
+.playlistItem { min-width: 0; display: flex; align-items: center; gap: 12px; padding: 7px; text-align: left; border: 1px solid transparent; border-radius: 8px; cursor: pointer; transition: background .2s, border-color .2s; }
+.playlistItem:hover { background: #e9e5dd; }
+.playlistItem[aria-pressed="true"] { background: #e8e3da; border-color: #d5cfc4; }
+.thumbnail { flex-shrink: 0; position: relative; width: 40px; height: 55px; border-radius: 4px; overflow: hidden; background: #d2ccc1; }
+.thumbnail img { object-fit: cover; }
+.playlistText { display: flex; flex-direction: column; gap: 5px; font-size: .75rem; line-height: 1.4; }
+.playlistText small { font-family: "PP Supply Mono", monospace; font-size: .6rem; color: #817b72; }
+.smallPlay { margin-left: auto; flex-shrink: 0; width: 22px; height: 22px; opacity: .5; }
+.playlistItem[aria-pressed="true"] .smallPlay { opacity: 1; }
+.keyboardHint { margin-top: 24px; font-family: "PP Supply Mono", monospace; font-size: .55rem; color: #8b8479; letter-spacing: .02em; }
+.card:focus-visible, .allWork:focus-visible { outline: 3px solid #9a512d; outline-offset: 5px; }
+.dialog button:focus-visible, .dialog a:focus-visible, .film video:focus-visible { outline: 2px solid #a15d37; outline-offset: 3px; }
+@keyframes backdropEnter { from { opacity: 0; } to { opacity: 1; } }
+@media (max-width: 1023px) {
+  .section { padding: 4rem 2.5rem; }
+  .cardInfo { left: 22px; right: 22px; }
+  .brand { font-size: 1.8rem; }
+  .details { padding: 24px; }
+}
+@media (max-width: 767px) {
+  .section { padding: 3.5rem 1.5rem; }
+  .headingRow { margin-bottom: 2rem; }
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  .wide, .narrow { grid-column: span 2; }
+  .card { height: 440px; height: min(118vw, 510px); }
+  .cardInfo { left: 24px; bottom: 24px; }
+  .brand { font-size: 2rem; }
+  .category { font-size: .58rem; }
+  .dialog { width: calc(100vw - 20px); max-height: calc(100dvh - 20px); border-radius: 14px; }
+  .galleryHeader { padding: 10px 16px; }
+  .brandTabs { padding: 10px 14px; gap: 4px; }
+  .brandTabs button { padding: 9px 11px; }
+  .galleryBody { grid-template-columns: 1fr; }
+  .stage { height: min(56dvh, 540px); min-height: 280px; padding: 14px; }
+  .details { padding: 24px; }
+  .projectTitle { font-size: 2rem; }
+  .description { max-width: none; margin-bottom: 20px; }
+  .keyboardHint { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cover, .play, .allWork span { transition: none; }
+  .card:hover .cover, .card:hover .play, .allWork:hover span { transform: none; }
+  .dialog::backdrop { animation: none; }
+}

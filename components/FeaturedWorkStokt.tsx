@@ -1,215 +1,183 @@
 "use client";
 
-import Image from "next/image";
-import { useLanguage } from "@/lib/LanguageContext";
+import Image from 'next/image';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { useEffect, useRef, useState, type RefObject } from 'react';
+import { createPortal } from 'react-dom';
+import { useLanguage } from '@/lib/LanguageContext';
+import { workProjects, type WorkFilm } from '@/lib/featured-work';
+import styles from './FeaturedWorkStokt.module.css';
 
 const copy = {
-  en: { tag: "[ Selected Projects ]", heading: "Featured Work", allWork: "All Work →" },
-  fr: { tag: "[ Projets Sélectionnés ]", heading: "Nos Réalisations", allWork: "Tous Les Projets →" },
+  en: {
+    tag: '[ Selected Projects ]', heading: 'Featured Work', allWork: 'Explore all 9 films',
+    watch: 'Watch project', films: 'films', film: 'film', close: 'Close gallery',
+    previous: 'Previous film', next: 'Next film', selected: 'Selected films',
+    soundOn: 'Sound on', soundOff: 'Sound off', loading: 'Loading film…',
+    error: 'This film could not be loaded.', download: 'Open video',
+    hint: '← → Browse films · Esc to close',
+  },
+  fr: {
+    tag: '[ Projets Sélectionnés ]', heading: 'Nos Réalisations', allWork: 'Voir les 9 films',
+    watch: 'Voir le projet', films: 'films', film: 'film', close: 'Fermer la galerie',
+    previous: 'Film précédent', next: 'Film suivant', selected: 'Sélection de films',
+    soundOn: 'Activer le son', soundOff: 'Couper le son', loading: 'Chargement du film…',
+    error: 'Ce film n’a pas pu être chargé.', download: 'Ouvrir la vidéo',
+    hint: '← → Parcourir les films · Échap pour fermer',
+  },
 };
+type GalleryCopy = (typeof copy)['en'];
+type Selection = { project: number; film: number };
 
-const projects = [
-  {
-    id: 1,
-    name: "Kastle AI",
-    tags: ["Brand Identity", "Web Design & Dev", "Motion & 3D"],
-    image: "/images/work-kastle.png",
-  },
-  {
-    id: 2,
-    name: "We Scale It",
-    tags: ["Brand Identity", "Web Design & Dev"],
-    image: "/images/work-wescaleit.png",
-  },
-  {
-    id: 4,
-    name: "Jeremie Bouchard",
-    tags: ["Brand Identity", "Motion & 3D"],
-    image: "/images/work-jeremie.jpeg",
-  },
-  {
-    id: 5,
-    name: "Enzo Drew",
-    tags: ["Brand Identity", "Web Design & Dev"],
-    image: "/images/work-enzo.png",
-  },
-];
+function PlayIcon() {
+  return <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m9 5 11 7-11 7V5Z" /></svg>;
+}
 
 export default function FeaturedWork() {
   const { lang } = useLanguage();
+  const [selection, setSelection] = useState<Selection | null>(null);
+  const reducedMotion = useReducedMotion();
   const t = copy[lang];
+
   return (
-    <section
-      id="work"
-      className="px-6 md:px-10 lg:px-14"
-      style={{
-        backgroundColor: "transparent",
-        paddingTop: "5rem",
-        paddingBottom: "5rem",
-      }}
-    >
-      <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
-        {/* Header */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "flex-end",
-            marginBottom: "3rem",
-            flexWrap: "wrap",
-            gap: "1rem",
-          }}
-        >
+    <section id="work" className={styles.section} aria-labelledby="featured-work-heading">
+      <div className={styles.container}>
+        <div className={styles.headingRow}>
           <div>
-            <p
-              style={{
-                fontFamily: '"PP Supply Mono", monospace',
-                fontSize: "0.72rem",
-                letterSpacing: "0.12em",
-                color: "rgba(0,0,0,0.5)",
-                textTransform: "uppercase",
-                marginBottom: "0.75rem",
-              }}
-            >
-              {t.tag}
-            </p>
-            <h2
-              style={{
-                fontFamily: '"PP Neue Montreal", sans-serif',
-                fontWeight: 700,
-                fontSize: "clamp(2rem, 4vw, 3.5rem)",
-                letterSpacing: "-0.02em",
-                color: "#000000",
-                lineHeight: 1.1,
-              }}
-            >
-              {t.heading}
-            </h2>
+            <p className={styles.eyebrow}>{t.tag}</p>
+            <h2 id="featured-work-heading" className={styles.heading}>{t.heading}</h2>
           </div>
-          <a
-            href="#"
-            style={{
-              fontFamily: '"PP Neue Montreal", sans-serif',
-              fontWeight: 500,
-              fontSize: "0.875rem",
-              letterSpacing: "0.05em",
-              color: "rgba(0,0,0,0.6)",
-              textDecoration: "none",
-              display: "flex",
-              alignItems: "center",
-              gap: "0.5rem",
-              transition: "color 0.2s ease",
-            }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = "#000000"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(0,0,0,0.6)"; }}
-          >
-            {t.allWork}
-          </a>
+          <button className={styles.allWork} onClick={() => setSelection({ project: 0, film: 0 })}>
+            {t.allWork} <span aria-hidden="true">↗</span>
+          </button>
         </div>
-
-        {/* Bento Grid — 4 cards */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-          {/* Row 1: Wide left (8) + Narrow right (4) */}
-          <WorkCard project={projects[0]} colClass="md:col-span-8" aspectRatio="56%" />
-          <WorkCard project={projects[1]} colClass="md:col-span-4" aspectRatio="65%" />
-
-          {/* Row 2: Narrow left (4) + Wide right (8) — mirrored */}
-          <WorkCard project={projects[2]} colClass="md:col-span-4" aspectRatio="65%" />
-          <WorkCard project={projects[3]} colClass="md:col-span-8" aspectRatio="56%" />
+        <div className={styles.grid}>
+          {workProjects.map((project, index) => (
+            <button key={project.id} className={`${styles.card} ${project.wide ? styles.wide : styles.narrow}`}
+              aria-label={`${t.watch}: ${project.name}, ${project.films.length} ${project.films.length === 1 ? t.film : t.films}`}
+              aria-haspopup="dialog" onClick={() => setSelection({ project: index, film: 0 })}>
+              <Image src={project.cover} alt="" fill sizes={project.wide ? '(max-width: 767px) 100vw, 66vw' : '(max-width: 767px) 100vw, 33vw'} className={styles.cover} style={{ objectPosition: project.coverPosition }} />
+              <span className={styles.shade} />
+              <span className={styles.count}>{String(project.films.length).padStart(2, '0')} {project.films.length === 1 ? t.film : t.films}</span>
+              <span className={styles.play}><PlayIcon /></span>
+              <span className={styles.cardInfo}>
+                <span className={styles.category}>{project.category[lang]}</span>
+                <span className={styles.brand}>{project.name}</span>
+                <span className={styles.watch}>{t.watch} <span aria-hidden="true">↗</span></span>
+              </span>
+            </button>
+          ))}
         </div>
       </div>
+      {typeof document !== 'undefined' && createPortal(
+        <AnimatePresence>
+          {selection !== null && <ProjectGallery key="work-gallery" projectIndex={selection.project} filmIndex={selection.film}
+            onSelect={setSelection} onClose={() => setSelection(null)} reducedMotion={!!reducedMotion} />}
+        </AnimatePresence>, document.body,
+      )}
     </section>
   );
 }
 
-function WorkCard({
-  project,
-  colClass,
-  aspectRatio,
-}: {
-  project: (typeof projects)[0];
-  colClass: string;
-  aspectRatio: string;
+function ProjectGallery({ projectIndex, filmIndex, onSelect, onClose, reducedMotion }: {
+  projectIndex: number; filmIndex: number; onSelect: (selection: Selection) => void;
+  onClose: () => void; reducedMotion: boolean;
 }) {
+  const { lang } = useLanguage();
+  const t = copy[lang];
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const project = workProjects[projectIndex];
+  const film = project.films[filmIndex];
+  const close = () => { videoRef.current?.pause(); onClose(); };
+  const changeFilm = (direction: number) => onSelect({ project: projectIndex, film: (filmIndex + direction + project.films.length) % project.films.length });
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    const trigger = document.activeElement;
+    const previousOverflow = document.body.style.overflow;
+    dialog?.showModal();
+    document.body.style.overflow = 'hidden';
+    return () => {
+      dialog?.close();
+      document.body.style.overflow = previousOverflow;
+      if (trigger instanceof HTMLElement && trigger.isConnected) trigger.focus({ preventScroll: true });
+    };
+  }, []);
+
   return (
-    <div
-      className={`work-card ${colClass}`}
-      style={{
-        position: "relative",
-        overflow: "hidden",
-        borderRadius: "12px",
-        backgroundColor: "#111",
-        cursor: "pointer",
+    <motion.dialog ref={dialogRef} className={styles.dialog} aria-labelledby="work-gallery-heading"
+      initial={reducedMotion ? false : { opacity: 0, y: 32, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: reducedMotion ? 0 : 18, scale: reducedMotion ? 1 : 0.98 }}
+      transition={{ duration: reducedMotion ? 0 : 0.3, ease: [0.22, 1, 0.36, 1] }}
+      onCancel={(event) => { event.preventDefault(); close(); }}
+      onClick={(event) => {
+        if (event.target !== event.currentTarget) return;
+        const rect = event.currentTarget.getBoundingClientRect();
+        if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) close();
       }}
-    >
-      <div
-        style={{
-          position: "relative",
-          paddingBottom: aspectRatio,
-          overflow: "hidden",
-        }}
-      >
-        <Image
-          src={project.image}
-          alt={project.name}
-          fill
-          sizes="(max-width: 768px) 100vw, 60vw"
-          className="work-card-img"
-          style={{ objectFit: "cover", transition: "transform 0.6s ease" }}
-        />
-        {/* Gradient overlay */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            background:
-              "linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.85) 100%)",
-            zIndex: 1,
-          }}
-        />
-        {/* Card info */}
-        <div
-          style={{
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            padding: "1.5rem",
-            zIndex: 2,
-          }}
-        >
-          <h3
-            style={{
-              fontFamily: '"PP Neue Montreal", sans-serif',
-              fontWeight: 600,
-              fontSize: "1.05rem",
-              color: "#ffffff",
-              marginBottom: "0.5rem",
-            }}
-          >
-            {project.name}
-          </h3>
-          <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
-            {project.tags.map((tag) => (
-              <span
-                key={tag}
-                style={{
-                  fontFamily: '"PP Supply Mono", monospace',
-                  fontSize: "0.65rem",
-                  letterSpacing: "0.05em",
-                  color: "rgba(255,255,255,0.7)",
-                  border: "1px solid rgba(255,255,255,0.2)",
-                  borderRadius: "2rem",
-                  padding: "0.2rem 0.6rem",
-                  backgroundColor: "rgba(0,0,0,0.4)",
-                }}
-              >
-                {tag}
-              </span>
+      onKeyDown={(event) => {
+        if ((event.target as HTMLElement).closest('video') || project.films.length < 2) return;
+        if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') { event.preventDefault(); changeFilm(event.key === 'ArrowRight' ? 1 : -1); }
+      }}>
+      <header className={styles.galleryHeader}>
+        <span className={styles.eyebrow}>{t.selected} <span className={styles.total}>/ 09</span></span>
+        <button autoFocus className={styles.close} aria-label={t.close} onClick={close}>✕</button>
+      </header>
+      <nav className={styles.brandTabs} aria-label={lang === 'en' ? 'Choose a project' : 'Choisir un projet'}>
+        {workProjects.map((item, index) => (
+          <button key={item.id} aria-pressed={index === projectIndex} onClick={() => onSelect({ project: index, film: 0 })}>
+            {item.name}<span>{String(item.films.length).padStart(2, '0')}</span>
+          </button>
+        ))}
+      </nav>
+      <div className={styles.galleryBody}>
+        <div className={styles.stage}>
+          <AnimatePresence mode="wait" initial={false}>
+            <FilmPlayer key={film.id} film={film} title={film.title[lang]} t={t} reducedMotion={reducedMotion} videoRef={videoRef} />
+          </AnimatePresence>
+        </div>
+        <div className={styles.details}>
+          <p className={styles.eyebrow}>{project.category[lang]}</p>
+          <h3 id="work-gallery-heading" className={styles.projectTitle}>{project.name}</h3>
+          <p className={styles.description}>{project.description[lang]}</p>
+          <div className={styles.filmHeading}>
+            <p className={styles.eyebrow}>{String(filmIndex + 1).padStart(2, '0')} / {String(project.films.length).padStart(2, '0')}</p>
+            {project.films.length > 1 && <div className={styles.arrows}>
+              <button aria-label={t.previous} onClick={() => changeFilm(-1)}>←</button>
+              <button aria-label={t.next} onClick={() => changeFilm(1)}>→</button>
+            </div>}
+          </div>
+          <p className={styles.filmTitle} aria-live="polite">{film.title[lang]}</p>
+          <div className={styles.playlist} aria-label={project.name}>
+            {project.films.map((item, index) => (
+              <button key={item.id} className={styles.playlistItem} aria-pressed={filmIndex === index} onClick={() => onSelect({ project: projectIndex, film: index })}>
+                <span className={styles.thumbnail}><Image src={item.poster} alt="" fill sizes="48px" /></span>
+                <span className={styles.playlistText}><span>{item.title[lang]}</span><small>{item.duration}</small></span>
+                <span className={styles.smallPlay}><PlayIcon /></span>
+              </button>
             ))}
           </div>
+          <p className={styles.keyboardHint}>{t.hint}</p>
         </div>
       </div>
-    </div>
+    </motion.dialog>
+  );
+}
+
+function FilmPlayer({ film, title, t, reducedMotion, videoRef }: {
+  film: WorkFilm; title: string; t: GalleryCopy; reducedMotion: boolean; videoRef: RefObject<HTMLVideoElement | null>;
+}) {
+  const [muted, setMuted] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [failed, setFailed] = useState(false);
+  return (
+    <motion.div className={styles.film} initial={{ opacity: 0, y: reducedMotion ? 0 : 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: reducedMotion ? 0 : -12 }} transition={{ duration: reducedMotion ? 0 : 0.18 }}>
+      <video ref={videoRef} src={film.src} poster={film.poster} aria-label={title} controls playsInline autoPlay muted={muted} preload="metadata"
+        onLoadedData={() => setLoading(false)} onError={() => { setLoading(false); setFailed(true); }} onVolumeChange={(event) => setMuted(event.currentTarget.muted)} />
+      {!failed && <button className={styles.sound} onClick={() => setMuted(!muted)}>{muted ? t.soundOn : t.soundOff} <span aria-hidden="true">{muted ? '＋' : '−'}</span></button>}
+      {loading && <span className={styles.loading} role="status">{t.loading}</span>}
+      {failed && <div className={styles.playerError} role="alert"><p>{t.error}</p><a href={film.src}>{t.download} ↗</a></div>}
+    </motion.div>
   );
 }
