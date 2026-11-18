@@ -41,7 +41,7 @@ export const workProjects: WorkProject[] = [
       en: 'Sauces in motion. Dessert close-ups and recipe films show the range, from the first pour to the finishing touch.',
       fr: 'Les sauces en mouvement. Gros plans gourmands et films recettes, de la première coulée à la touche finale.',
     },
-    cover: '/work/nutbo/cover-ivory-v3.webp', coverPosition: '50% 50%', wide: false,
+    cover: '/work/nutbo/cover-ivory-v4.webp', coverPosition: '50% 50%', wide: false,
     films: [
       { id: 'DSDCN7diJQQ', title: { en: 'A sauce for every dessert', fr: 'À chaque dessert sa sauce' }, src: '/work/nutbo/sweet-sauces.mp4', poster: '/work/nutbo/sweet-sauces.jpg', duration: '0:19' },
       { id: 'DSXjuUlgms4', title: { en: 'The finishing touch', fr: 'La touche finale' }, src: '/work/nutbo/finishing-touch.mp4', poster: '/work/nutbo/finishing-touch.jpg', duration: '0:25' },
